@@ -1,4 +1,4 @@
-package com.bignerdranch.android.coroutineflow.lesson.lesson2
+package com.bignerdranch.android.coroutineflow.lesson.lesson1
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
