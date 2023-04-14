@@ -20,16 +20,26 @@ suspend fun main() {
 fun getFlowOf(): Flow<Int> {
     return flowOf(2, 43, 42, 53, 23, 45, 4, 24, 65, 3)
 }
-
 fun getFlow(): Flow<Int> {
-    val numbers = listOf<Int>(2, 43, 42, 53, 23, 45, 4, 24, 65, 3)
+    val numbers = getFlowOf()
     return flow {
-        for (i in numbers) {
-            emit(i)
-            println(i)
-        }
+//        numbers.collect(){
+//            println(it)
+//            emit(it)
+//        }
+        emitAll(numbers)
     }
 }
+
+//fun getFlow(): Flow<Int> {
+//    val numbers = listOf<Int>(2, 43, 42, 53, 23, 45, 4, 24, 65, 3)
+//    return flow {
+//        for (i in numbers) {
+//            emit(i)
+//            println(i)
+//        }
+//    }
+//}
 
     suspend fun Int.isPrime(): Boolean {
         if (this <= 1) {

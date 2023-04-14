@@ -2,6 +2,7 @@ package com.bignerdranch.android.coroutineflow
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bignerdranch.android.coroutineflow.crypto_app.CryptoActivity
 import com.bignerdranch.android.coroutineflow.databinding.ActivityMainBinding
 import com.bignerdranch.android.coroutineflow.lesson.lesson2.UsersActivity
 
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonUsersActivity.setOnClickListener {
             startActivity(UsersActivity.newIntent(this))
+        }
+        binding.buttonCryptoActivity.setOnClickListener {
+            startActivity(CryptoActivity.newIntent(this))
         }
     }
 }
