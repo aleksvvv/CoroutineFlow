@@ -5,8 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.bignerdranch.android.coroutineflow.databinding.ActivityCryptoBinding
+import kotlinx.coroutines.launch
 
 
 class CryptoActivity : AppCompatActivity() {
@@ -28,25 +29,30 @@ class CryptoActivity : AppCompatActivity() {
         observeViewModel()
     }
 
+
     private fun setupRecyclerView() {
         binding.recyclerViewCurrencyPriceList.adapter = adapter
         binding.recyclerViewCurrencyPriceList.itemAnimator = null
     }
 
     private fun observeViewModel() {
-        viewModel.state.observe(this) {
-            when (it) {
-                is State.Initial -> {
-                    binding.progressBarLoading.isVisible = false
+        lifecycleScope.launch {
+                viewModel.state
+                    .flowWithLifecycle(lifecycle,minActiveState = Lifecycle.State.RESUMED)
+                    .collect {
+                    when (it) {
+                        is State.Initial -> {
+                            binding.progressBarLoading.isVisible = false
+                        }
+                        is State.Loading -> {
+                            binding.progressBarLoading.isVisible = true
+                        }
+                        is State.Content -> {
+                            binding.progressBarLoading.isVisible = false
+                            adapter.submitList(it.currencyList)
+                        }
+                    }
                 }
-                is State.Loading -> {
-                    binding.progressBarLoading.isVisible = true
-                }
-                is State.Content -> {
-                    binding.progressBarLoading.isVisible = false
-                    adapter.submitList(it.currencyList)
-                }
-            }
         }
     }
 
