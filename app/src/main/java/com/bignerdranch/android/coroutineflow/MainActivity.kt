@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.bignerdranch.android.coroutineflow.crypto_app.CryptoActivity
 import com.bignerdranch.android.coroutineflow.databinding.ActivityMainBinding
 import com.bignerdranch.android.coroutineflow.lesson.lesson2.UsersActivity
+import com.bignerdranch.android.coroutineflow.team_score.TeamScoreActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         }
         binding.buttonCryptoActivity.setOnClickListener {
             startActivity(CryptoActivity.newIntent(this))
+        }
+        binding.teamScoreActivity.setOnClickListener {
+            startActivity(TeamScoreActivity.newIntent(this))
         }
     }
 }
