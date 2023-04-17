@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.*
 import com.bignerdranch.android.coroutineflow.databinding.ActivityCryptoBinding
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -20,6 +21,7 @@ class CryptoActivity : AppCompatActivity() {
         ViewModelProvider(this)[CryptoViewModel::class.java]
     }
 
+
     private val adapter = CryptoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +29,9 @@ class CryptoActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupRecyclerView()
         observeViewModel()
+        binding.buttonRefreshList.setOnClickListener {
+            viewModel.refreshList()
+        }
     }
 
 

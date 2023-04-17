@@ -2,6 +2,8 @@ package com.bignerdranch.android.coroutineflow.crypto_app
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlin.random.Random
 
@@ -10,16 +12,16 @@ object CryptoRepository {
     private val currencyNames = listOf("BTC", "ETH", "USDT", "BNB", "USDC")
     private val currencyList = mutableListOf<Currency>()
 
-    fun getCurrencyList(): Flow<List<Currency>> {
-        return flow {
-            emit(currencyList.toList())
-            while (true) {
-                delay(3000)
-                generateCurrencyList()
-                emit(currencyList.toList())
-                delay(3000)
-                }
-        }
+    private val _currencyListFlow =
+        MutableSharedFlow<List<Currency>>()
+    val currencyListFlow=
+        _currencyListFlow.asSharedFlow()
+
+
+    suspend fun loadData() {
+        delay(3000)
+        generateCurrencyList()
+        _currencyListFlow.emit(currencyList.toList())
     }
 
     private fun generateCurrencyList() {
