@@ -5,8 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bignerdranch.android.coroutineflow.databinding.ActivityTeamScoreBinding
+import com.bignerdranch.android.coroutineflow.lesson.lesson9.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 class TeamScoreActivity : AppCompatActivity() {
@@ -22,28 +28,33 @@ class TeamScoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        observeViewModel()
-        setupListeners()
+                observeViewModel()
+               setupListeners()
     }
 
     private fun observeViewModel() {
-        viewModel.state.observe(this) {
-            when (it) {
-                is TeamScoreState.Game -> {
-                    binding.team1Score.text = it.score1.toString()
-                    binding.team2Score.text = it.score2.toString()
-                }
-                is TeamScoreState.Winner -> {
-                    binding.team1Score.text = it.score1.toString()
-                    binding.team2Score.text = it.score2.toString()
-                    Toast.makeText(
-                        this,
-                        "Winner: ${it.winnerTeam}",
-                        Toast.LENGTH_LONG
-                    ).show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED){
+                viewModel.state.collect {
+                    when (it) {
+                        is TeamScoreState.Game -> {
+                            binding.team1Score.text = it.score1.toString()
+                            binding.team2Score.text = it.score2.toString()
+                        }
+                        is TeamScoreState.Winner -> {
+                            binding.team1Score.text = it.score1.toString()
+                            binding.team2Score.text = it.score2.toString()
+                            Toast.makeText(
+                                this@TeamScoreActivity,
+                                "Winner: ${it.winnerTeam}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
             }
         }
+
     }
 
     private fun setupListeners() {
